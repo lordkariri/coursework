@@ -1,0 +1,205 @@
+
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+
+
+
+
+
+
+.logo {
+  position: absolute;
+  margin: 0px 0px;
+  z-index: 5;
+  left: 3%;
+  top: 3%;
+ 
+  
+  color: #fff;
+  font-weight: bold;
+  font-size: 30px;
+  letter-spacing: 2px;
+  padding: 0px 0px;
+  
+}
+.logo:hover{
+  color: grey;
+  background-color: transparent;
+
+}
+#questionButton{
+  z-index: 5;
+  top: 3%;
+  right:3% ;
+}
+#backgroundButton{
+  z-index: 5;
+  left:8%;
+}
+#snapshotButton{
+  z-index: 5;
+  right:4%;
+}
+#playButton{
+  z-index: 5;
+  left:50%;
+}
+#MIDIdownloadButton{
+  z-index: 5;
+  right:8%;
+}
+#recordButton{
+  z-index: 5;
+  right:12%;
+}
+#undoButton{
+  z-index: 5;
+  left:4%;
+  
+}
+
+.btn-outline-light{
+  
+  position: absolute;
+  margin: 0px 0px;
+  padding: 0px 0px;
+ 
+  border-width: 0px;
+  right:5%;
+  font-weight: bold;
+
+  background-color: transparent; 
+}
+#colour1Button{
+  
+  color:green;
+}
+
+.btn-outline-light:hover {
+  color: grey;
+  background-color: transparent;
+  
+}
+.btn-check:active+.btn-outline-light, .btn-check:checked+.btn-outline-light, .btn-outline-light.active, .btn-outline-light.dropdown-toggle.show, .btn-outline-light:active {
+  background-color: transparent;
+  color: black;
+  border: 1px solid green;
+  
+}
+.btn-group{
+  z-index: 5;
+  top: 4%;
+  left: 10%;
+}
+#gradientCanvas{
+  position: absolute;
+}
+#backgroundCanvas{
+  position: absolute;
+}
+#drawingCanvas{
+  position: absolute;
+}
+
+
+
+
+/* button{
+  background-color: #fff;
+} */
+  /* button{
+  position: fixed;
+  left: 90%;
+  
+
+
+  border: 30;
+  line-height: 60px;
+  list-style: none;
+  background: rgba(0, 0, 0, 0);
+  overflow: hidden;
+  color: #fff;
+  padding: 0;
+  text-align: right;
+  margin: 0;
+
+  
+  transition: 1s;
+
+  color: #fff;
+  display: inline-block;
+  padding: 16px 40px;;
+} */
+
+
+
+footer {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  height: 10%;
+  right: 0;
+  bottom: 0;
+  left: 0;
+ 
+}
+
+.dropbtn {
+  background-color:transparent;
+  color: white;
+  padding: 16px;
+  left:9%;
+  font-size: 16px;
+  border: none;
+  z-index: 5;
+}
+
+/* The container <div> - needed to position the dropup content */
+.dropup {
+  left:10%;
+  position: relative;
+  display: inline-block;
+  z-index: 5;
+}
+
+/* Dropup content (Hidden by Default) */
+.dropup-content {
+  display: none;
+  position: absolute;
+  bottom: 50px;
+  background-color: transparent;
+  min-width: 300px;
+  
+  z-index: 5;
+}
+
+/* Links inside the dropup */
+.dropup-content a {
+  color: white;
+  padding: 12px 73px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropup links on hover */
+.dropup-content a:hover {
+  opacity: 0.5;
+}
+
+/* Show the dropup menu on hover */
+.dropup:hover .dropup-content {
+  display: block;
+}
+.drawingCanvas { 
+  position: absolute; top: 0; left: 0;
+  
+  }
+
+
+
+

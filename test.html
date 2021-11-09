@@ -1,0 +1,277 @@
+<head>
+    <img src="logo.png" style="width:50%; margin-right: auto; margin-left: 400px; ">
+</head>
+
+<style>
+
+body, a, a:hover { cursor:url('https://66.media.tumblr.com/7659e714cab33f9d59124f924405e793/tumblr_inline_p7g82dZq1h1r466gz_75sq.png'), auto 
+}
+
+body {
+  transform-style: preserve-3d;
+  background-image: url('img_girl.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+
+
+canvas {
+    cursor: pointer;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 200px;
+    padding: 5px;
+
+}
+
+
+.tools .color-field {
+    height:  40px;
+    width: 40px;
+    cursor:  pointer;
+    display:  inline-block;
+    box-sizing:  border-box;
+    border-radius: 50%;
+    border: 2px solid white;
+    align-self:  center;
+    margin: 5px 5px ;
+
+
+}
+
+
+.color-field {
+
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+
+.tools {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    margin-top: 110px;
+}
+
+.tools .button{
+    align-self:  center;
+    width: 100px;
+    height: 40px;
+    border: 2px solid white;
+    cursor:  pointer;
+    color: white;
+    background: #DB7093;
+    font-weight: bold;
+    margin:  0 10px;
+    display: block;
+
+}
+
+
+.button {
+
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.color-picker {
+    align-self: center;
+    margin: 0 15px;
+    background-color: pink;
+}
+
+.pen-range {
+    align-self:  center;
+    margin:  o 15px;
+    background-color: #DB7093;
+
+}
+
+
+.container {
+  width: 600px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  position: absolute;
+  z-index:-1;
+  margin-left:  425px;
+
+
+}
+
+#gif {
+background-image: url("gif.gif");
+position: fixed;
+width:  100%;
+transform: translateZ(-1px);
+top: 0;
+left: 0;
+
+  
+}
+
+
+</style>
+
+
+<body style="background-image: url('https://images8.alphacoders.com/105/1055726.png');">
+
+
+<div id="gif"> <img src="gif.gif"> </div>
+
+
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> cute drawing program </title>
+
+
+
+<div class="container">
+  <div id="status" style="color: white;"></div>
+  <img src="container.png" style="width:120%;">
+</div>
+
+
+<div class="field">
+<canvas id="canvas"> </canvas>
+
+<div class="tools">
+<button onClick="undo_last()" type="button" class="button"> Undo </button>
+<button onClick="clear_canvas()" type="button" class="button"> Clear </button>
+
+
+<div onClick="change_color(this)" class="color-field" style="background: red;"></div>
+<div onClick="change_color(this)" class="color-field" style="background: blue;"></div>
+<div onClick="change_color(this)" class="color-field" style="background: yellow;"></div>
+<div onClick="change_color(this)" class="color-field" style="background: green;"></div>
+<div onClick="change_color(this)" class="color-field" style="background: orange;"></div>
+<div onClick="change_color(this)" class="color-field" style="background: pink;"></div>
+<div onClick="change_color(this)" class="color-field" style="background: brown;"></div>
+<div onClick="change_color(this)" class="color-field" style="background: gray;"></div>  
+<div onClick="change_color(this)" class="color-field" style="background: black;"></div>
+<div onClick="change_color(this)" class="color-field" style="background: white;"></div>
+
+<input onInput="draw_color = this.value" type="color" class="color-picker">
+<input type="range" min="1" max="100" class="pen-range" onInput="draw_width = this.value">
+</div>
+</div>
+
+<script>
+    
+    const canvas = document.getElementById("canvas");
+    canvas.width = window.innerWidth = 650;
+    canvas.height = 350;
+
+    let context = canvas.getContext("2d");
+    let start_background_color ="white";
+    context.fillStyle = start_background_color;
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    
+    let restore_array =[];
+    let index = -1;
+    let draw_color = "black";
+    let draw_width = "2";
+    let is_drawing = false;
+    
+    
+
+
+    function change_color(element) {
+        draw_color = element.style.background;
+    }
+
+    canvas.addEventListener("touchstart", start, false);
+    canvas.addEventListener("touchmove", draw, false);
+    canvas.addEventListener("mousedown", start, false);
+    canvas.addEventListener("mousemove", draw, false);
+    
+    canvas.addEventListener("mtouchstart", stop, false);
+    canvas.addEventListener("mouseup", stop, false);
+    canvas.addEventListener("mouseout", stop, false);
+
+
+    function start(event) {
+        is_drawing = true;
+        context.beginPath();
+        context.moveTo(event.clientX - canvas.offsetLeft,
+                       event.clientY - canvas.offsetTop);
+
+    event.preventDefault();
+    }
+
+function draw(event) {
+    if ( is_drawing ) {
+        context.lineTo(event.clientX - canvas.offsetLeft,
+                       event.clientY - canvas.offsetTop);
+        context.strokeStyle = draw_color;
+        context.lineWidth = draw_width;
+        context.lineCap = "round";
+        context.lineJoin = "round";
+        context.stroke();
+    }
+
+    event.preventDefault();
+}
+
+
+function stop(event) {
+    if (is_drawing) {
+        context.stroke();
+        context.closePath();
+        is_drawing = false;
+    }
+
+    event.preventDefault();
+
+
+    if (event.type != 'mouseout'){
+    restore_array.push(context.getImageData(0, 0, canvas.width, canvas.height));
+    index += 1;
+    }
+}
+
+ function undo_last(){
+     if (index <= 0) {
+        clear_canvas();
+     }
+     else {
+        index -=1;
+        restore_array.pop();
+        context.putImageData(restore_array[index], 0, 0);
+
+        }
+
+     }
+
+
+function clear_canvas() {
+    context.fillStyle = start_background_color;
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.fillRect(0, 0, canvas.width, canvas.height);
+
+    restore_array = [];
+    index = -1;
+} 
+
+
+</script>
+
+
+
+</body>
+
+
+
+
+
+
+
+</html>
