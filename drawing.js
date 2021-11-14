@@ -18,27 +18,38 @@ let yCoOrds = [];
 let lineX = [];
 let lineY = [];
 let lineColor = [];
-
+let lineWidth = [];
+let d=null;
+let t=0;
+let tempX=0;
+let tempy=0;
 
 function startPosition(e){
+    tempX=e.clientX;    // Elena modified: start click pointX remember
+    tempY=e.clientY;    // Elena modified: start click pointY remember
     xStart.push(e.clientX);
     yStart.push(e.clientY);
     yStart[yStart.length-1] = soundConverter(yStart[yStart.length - 1],bracket);
    
-  
+    // Elena modified: start point time
+    d = new Date();
+    t = d.getTime();
+
     painting = true;
-    draw(e);
+    
+    draw(e,true); // Elena modified: second parameter is setting start point width by 1
 }
 function finishedPosition() {
     lineX.push(xCoOrds);
     lineY.push(yCoOrds);
+    lineWidth.push(ctx.lineWidth);
     lineColor.push(currentBrush);
     xCoOrds = []
     yCoOrds = []
     painting = false;
     restore_array.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
     index+=1;
-    console.log(lineColor);
+    //volumeOfLine = volume(ctx.lineWidth.toFixed());
     
     
     
@@ -47,17 +58,24 @@ function finishedPosition() {
     
     
 }
+
+function volume(width){
+    if (width<40){
+        
+    }
+}
 function changeColor(currentPallet){
  
     
-   
-    var i;
+    
+    // for every line on the page
     for (lineNum = 0; lineNum < lineX.length; lineNum++) {
-        
+        //for all the coordinates on the line.
         
         for (i = 0; i< lineX[lineNum].length; i++){
+            //move the mouse to the start coordinate of the line
             ctx.moveTo(lineX[lineNum][i], lineY[lineNum][i]);
-            
+            //find out what colour the line is supposed to be 
             if (currentPallet ==1){
                 if (lineColor[lineNum]==1){
                     currentDrawingColour = pallet1colour1
@@ -84,8 +102,9 @@ function changeColor(currentPallet){
                     currentDrawingColour = pallet3colour3
                 }
             }
-            
+            //set the paint brush to the right colour
             ctx.strokeStyle = currentDrawingColour;
+            ctx.lineWidth = lineWidth[lineNum];
             ctx.beginPath();
             
             ctx.lineTo(lineX[lineNum][i], lineY[lineNum][i]);
@@ -100,22 +119,39 @@ function changeColor(currentPallet){
     }
 }
 
-function draw(e){
-    //console.log(color);
+function draw(e,s){
+    
     if(!painting) return;
     if (backgroundButtonPressed) return;
+    ctx.strokeStyle = currentDrawingColour;
+
+    // Elena modified: end point time
+    d = new Date();
+    var p=d.getTime() - t;
+
+    if(s) // Elena modified: check start point
+        ctx.lineWidth = 20; // Elena modified: initial lineWidth
+    else {
+        if(p<5000)
+            ctx.lineWidth = 20+60*p/5000;  // Elena modified: ratio lineWidth
+        else
+            ctx.lineWidth = 80; // Elena modified: max lineWidth
+    }
     
-    ctx.lineWidth = 40;
+
     ctx.lineCap = "round";
-    ctx.strokeStyle = currentDrawingColour; 
+    
+   
     xCoOrds.push(e.clientX);
     yCoOrds.push(e.clientY);
-    
-    ctx.moveTo(e.clientX, e.clientY);
-    ctx.lineTo(e.clientX, e.clientY);
+    ctx.strokeStyle = currentDrawingColour;
+    ctx.moveTo(tempX, tempY);           // Elena modified: draw line - start
+    ctx.lineTo(e.clientX, e.clientY);   // Elena modified: draw line - end
     ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(e.clientX, e.clientY);
+    tempX=e.clientX;    // Elena modified: start click pointX reset
+    tempY=e.clientY;   
+     // Elena modified: start click pointX reset
+
 }
 function undo(){
 

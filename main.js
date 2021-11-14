@@ -9,12 +9,12 @@ var playing = true;
 //storing the notes, chords, and sounds in an array
 var scale = ['C5','G4','F4','E4','D4','C4','F3','G3'];
 var chord = [['C4','E4','G4'],['A3','C4','F4'],['B3','D4','G4']];
-var percussion = ["C4","D4","E4"];
+var percussion = ["tink","hihat","snare"];
 //default pallet when you open the webpage
 var currentPallet = 1;
 //setting all the colours as variables to they can easily be changed across the whole program
-var pallet1colour1 = "#454266";
-var pallet1colour2 = "#A344F2";
+var pallet1colour1 = "#67aff0";
+var pallet1colour2 = "#f0a867";
 var pallet1colour3 = "#F2D42C";
 var pallet2colour1 = "green";
 var pallet2colour2 = "black";
@@ -48,7 +48,7 @@ document.getElementById("dropUp2Button3").style.fill= pallet3colour3;
 //called by pressing the first paintbrush button, changes the colour to one required, and the musical attributes accordingly
 function colour1(){
    
-    currentBrush =1;
+    currentBrush = 1;
     // this is going to be the melody, so 8 divisions are needed, one for each note
     var sectioningNumber = 8;
     //function called to change the notes required by the brush
@@ -121,8 +121,8 @@ function colour2(){
     else{
         currentDrawingColour = pallet3colour3;
     }
-    console.log("SDFSF")
-    console.log(currentBrush);
+ 
+    
    
 
 }
