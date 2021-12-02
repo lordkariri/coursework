@@ -11,10 +11,11 @@ canvas.width = window.innerWidth;
 var bracket = sectioning(window.innerHeight);
 const ctx = canvas.getContext("2d"); 
 let painting = false;
+let allNotes = [];
 let index = -1;
 let restore_array = [];
-let xCoOrds = [];
-let yCoOrds = [];
+let xcoOrds = [];
+let ycoOrds = [];
 let lineX = [];
 let lineY = [];
 let lineColor = [];
@@ -27,9 +28,10 @@ let tempy=0;
 function startPosition(e){
     tempX=e.clientX;    // Elena modified: start click pointX remember
     tempY=e.clientY;    // Elena modified: start click pointY remember
-    xStart.push(e.clientX);
-    yStart.push(e.clientY);
-    yStart[yStart.length-1] = soundConverter(yStart[yStart.length - 1],bracket);
+    xstart.push(e.clientX);
+    ystart.push(e.clientY);
+   
+    ystart[ystart.length-1] = soundConverter(ystart[ystart.length - 1],bracket,parseInt(ctx.lineWidth));
    
     // Elena modified: start point time
     d = new Date();
@@ -40,12 +42,12 @@ function startPosition(e){
     draw(e,true); // Elena modified: second parameter is setting start point width by 1
 }
 function finishedPosition() {
-    lineX.push(xCoOrds);
-    lineY.push(yCoOrds);
+    lineX.push(xcoOrds);
+    lineY.push(ycoOrds);
     lineWidth.push(ctx.lineWidth);
     lineColor.push(currentBrush);
-    xCoOrds = []
-    yCoOrds = []
+    xcoOrds = []
+    ycoOrds = []
     painting = false;
     restore_array.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
     index+=1;
@@ -82,7 +84,8 @@ function changeColor(currentPallet){
                 } else if (lineColor[lineNum] == 2){
                     currentDrawingColour = pallet1colour2    
                 } else if (lineColor[lineNum]==3){
-                    console.log("called 2");
+
+                    
                     currentDrawingColour = pallet1colour3
                 }
             } else if (currentPallet ==2){
@@ -142,8 +145,8 @@ function draw(e,s){
     ctx.lineCap = "round";
     
    
-    xCoOrds.push(e.clientX);
-    yCoOrds.push(e.clientY);
+    xcoOrds.push(e.clientX);
+    ycoOrds.push(e.clientY);
     ctx.strokeStyle = currentDrawingColour;
     ctx.moveTo(tempX, tempY);           // Elena modified: draw line - start
     ctx.lineTo(e.clientX, e.clientY);   // Elena modified: draw line - end
@@ -154,8 +157,12 @@ function draw(e,s){
 
 }
 function undo(){
-
-
+    
+    if (numberOfBeats[lastIndex].deleteNote()){
+        numberOfBeats.splice(lastIndex);
+    };
+    
+    
     if(index <= 0){
         
         ctx.clearRect(0,0,canvas.width,canvas.height)
@@ -171,6 +178,7 @@ function undo(){
         index -= 1;
        
     }
+
 }
 
 canvas.addEventListener("mousedown", startPosition);
@@ -186,17 +194,14 @@ download_img = function(el) {
 
 
 function start(melody,scale,playing){
-    //console.log(playing);
+    
     for (let i = 0; i < melody.length; i++) {
         setTimeout(() => scale[melody[i]].play(), (i+1)*1000);
     } 
     if (playing){
-        start(yStart,scale);
+        start(ystart,scale);
     }
     
     
 }
-
-
-
 

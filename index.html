@@ -5,9 +5,11 @@
   <title>Capriccio</title>
   <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
 
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
 <script src="./Tone.js"></script>
 <link rel="stylesheet" href="./style.css">
 
@@ -22,10 +24,11 @@
             CAPRICCIO
          </div>
         <div>
+          <!--<button type="button" class="btn btn-lg btn-danger" data-bs-toggle="popover" title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?">Click to toggle popover</button>-->
          <button id = "questionButton"  type="button" class="btn btn-outline-light"><svg xmlns="http://www.w3.org/2000/svg" width="40" height=40" fill="#fff" class="bi bi-question-square" viewBox="0 0 16 16">
             <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
             <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
-          </svg></button>
+          </svg></button> 
           
 
         </div>
@@ -92,7 +95,7 @@
             <path d="M9 6h.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 7.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 16H2a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h7zm6 8.73V7.27l-3.5 1.555v4.35l3.5 1.556zM1 8v6a1 1 0 0 0 1 1h7.5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1z"/>
             <path d="M9 6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM7 3a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
           </svg></button>
-          <button  id ="playButton"  type="button" class="btn btn-outline-light" onclick=interactions() ><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16">
+          <button  id ="playButton"  type="button" class="btn btn-outline-light" onclick=playThisShiz() ><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16">
             <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
           </svg></button>
           
@@ -108,7 +111,8 @@
    
 <canvas id="gradientCanvas" class="color-canvas"  style="z-index: 1;"></canvas>   
 <canvas id="backgroundCanvas"  style="z-index: 2;"></canvas>
-<canvas id="drawingCanvas"  style="z-index: 3;"></canvas>
+<canvas id="drawingCanvas"  style="z-index: 4;"></canvas> 
+<canvas id="interactionCanvas"  style="z-index: 3;"></canvas> 
 
 
 
@@ -117,16 +121,17 @@
   <script src='https://cdnjs.cloudflare.com/ajax/libs/animejs/1.0.0/anime.min.js'></script>
   <script  src="./main.js"></script>
   <script  src="./music.js"></script>
+  <script  src="./letsmakemusic.js"></script>
   <script  src="./playmusic.js"></script>
-  <script  src="./undo.js"></script>
-  <script  src="./drawing.js"></script>
- 
-  
-  <script  src="./gradient.js"></script>
+  <script  src="./undo.js"></script> 
+  <script  src="./drawing.js"></script> 
+ <script  src="./interactions.js"></script>
+
+<script  src="./gradient.js"></script>
   <script  src="./test.js"></script>
 
 
-  <script  src="./changeBackground.js"></script>
+<script  src="./changeBackground.js"></script>
   
 
  

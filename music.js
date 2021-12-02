@@ -1,11 +1,19 @@
+//counter, that will later help determine the order of notes to be played
+let pause = 0;
+//creating a tree
 class BinarySearchTree {
+   
     constructor() {
        // Initialize a root element to null.
        this.root = null;
-    }
-    insertIter(data,volume) {
-       let node = new this.Node(data,volume=volume);
+  
        
+    }
+    //take the first x coordinate of the line and this will be the "data" of the node
+    insertIter(data,beat) {
+        //create a node object, each node will store a beat
+        let node = new this.Node(data,null,null,beat);
+        
        
        
  
@@ -16,29 +24,43 @@ class BinarySearchTree {
       
        return;
     }
+    //first node you want to check against the root. 
+    //currNode represents the node you are comparing the "data" against
     let currNode = this.root;
+    //will iterate through the tree to find the correct place the node needs to be inserted
     while (true) {
-    if (data < currNode.data) {
-       // Set the value here as we've reached a leaf node
-       if (currNode.left === null) {
-          currNode.left = node;
-             break;
-          } else {
-             currNode = currNode.left;
-          }
-       } else {
-          // Set the value here as we've reached a leaf node
-          if (currNode.right === null) {
-             currNode.right = node;
-             break;
-          } else {
-             currNode = currNode.right;
-          }
-       }
+       //if the data is larger then the current node
+        if (data < currNode.data) {
+            // check if the node to the left is empty
+            if (currNode.left === null) {
+            //if it is empty then insert the node here
+            currNode.left = node;
+            //it has been inserted to we can break away from the loop
+            break;
+            //if the node to the left is not empty...
+            } else {
+               //then set the current Node to the node to the left (this is the new node we will be checking our data against)
+                currNode = currNode.left;
+            }
+         // if data is smaller then the current node
+        }else {
+            // Check if the node to the right of it is empty
+            if (currNode.right === null) {
+                //if it is empty then insert the node here
+                currNode.right = node;
+                 //it has been inserted to we can break away from the loop
+                break;
+              //if the node to the right is not empty...
+            } else {
+               //then set the current Node to the node to the right (this is the new node we will be checking our data against)
+                currNode = currNode.right;
+            }
+        }
     }
  }
- insertRec(data) {
-    let node = new this.Node(data);
+ //creating the node
+ insertRec(data,beat) {
+    let node = new this.Node(data,beat);
  
     // Check if the tree is empty
     if (this.root === null) {
@@ -97,25 +119,30 @@ class BinarySearchTree {
     
     return !(deleteNodeHelper(this.root, key) === false);
  }
+ //in order traversal
  inOrder() {
+   //set the pause value to 0
+   pause = 0;
+   //calls the in order helper sending in the root value first
     inOrderHelper(this.root);
  }
  preOrder() {
+   pause = 0;
     preOrderHelper(this.root);
  }
  postOrder() {
+   pause = 0;
     postOrderHelper(this.root);
  }
  }
  
  BinarySearchTree.prototype.Node = class {
-    constructor(data, left = null, right = null, volume) {
+    constructor(data, left = null, right = null, beat, ) {
        this.data = data;
        this.left = left;
        this.right = right;
-       this.volume = volume;
-       alert(this.volume);
-       
+       this.beat = beat;  
+    
     }
  };
  
@@ -123,14 +150,43 @@ class BinarySearchTree {
  function preOrderHelper(root) {
     if (root !== null) {
        console.log(root.data);
+       for (let i = 0; i < root.beat.notes.length; i++) {
+         //play the note..
+         playMusic(root.beat.notes[i].pitch,root.beat.notes[i].volume,root.beat.notes[i].brush,pause,root.beat.notes[i].xcoOrds,root.beat.notes[i].ycoOrds,true)
+          
+       }
+       pause = pause+0.5;
        preOrderHelper(root.left);
        preOrderHelper(root.right);
     }
  }
  function inOrderHelper(root) {
+   //if the root is not empty
     if (root !== null) {
+       //call the same function (recursion) sending the node to the left as the root
        inOrderHelper(root.left);
+       //When there are no more nodes to the left, log the data of the leftest most node
        console.log(root.data);
+       //play the leftest most beat, for every note in the beat...
+       for (let i = 0; i < root.beat.notes.length; i++) {
+         //play the note..
+         playMusic(root.beat.notes[i].pitch,root.beat.notes[i].volume,root.beat.notes[i].brush,pause,root.beat.notes[i].xcoOrds,root.beat.notes[i].ycoOrds,true)
+         
+          
+       }
+       
+       //playMusic(root.beat.pitch,root.beat.volume,root.beat.brush,pause,root.beat.xcoOrds,root.beat.ycoOrds,true);
+       // there is going to be a 0.5 gap in between each beat. Everytime a node is traversed, the gap will increase 
+       //ie the first note will play at time = 0, the second beat will play at time = 0.5, the third beat will play at time = 1...
+       pause = pause+0.5;
+       
+       
+       
+       
+      //addDotAnimations(root.beat.xcoOrds,root.beat.ycoOrds)
+     
+       
+       //once there are no more nodes to the left, move to the node on the right
        inOrderHelper(root.right);
     }
  }
@@ -139,7 +195,13 @@ class BinarySearchTree {
     if (root !== null) {
        postOrderHelper(root.left);
        postOrderHelper(root.right);
-    console.log(root.data);
+        console.log(root.data);
+        for (let i = 0; i < root.beat.notes.length; i++) {
+         //play the note..
+         playMusic(root.beat.notes[i].pitch,root.beat.notes[i].volume,root.beat.notes[i].brush,pause,root.beat.notes[i].xcoOrds,root.beat.notes[i].ycoOrds,true)
+          
+       }
+       pause = pause+0.5;
     }
  }
  
@@ -169,11 +231,11 @@ class BinarySearchTree {
     }
     if (data < root.data) {
        return searchRecHelper(data, root.left);
- } else if (data > root.data) {
+    } else if (data > root.data) {
        return searchRecHelper(data, root.right);
     }
     // This means element is found return true;
- }
+}
  function deleteNodeHelper(root, key) {
     if (root === null) {
     // Empty tree return false;
@@ -210,6 +272,23 @@ class BinarySearchTree {
     }
 }
 
+//create a new tree, this tree represents the music...
 let music = new BinarySearchTree();
-music.insertIter(2,volume=4);
+
+
+
+let test = new BinarySearchTree();
+
+
+
+
+
+
+
+
+
+
+
+
+//each note is an object...
 

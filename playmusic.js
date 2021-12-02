@@ -1,15 +1,18 @@
-const synth = new Tone.Synth().toDestination();
 
-const now = Tone.now()
+let counter = 0;
 Tone.Transport.start()
+//set the default speed to 600 beats per minute
 Tone.Transport.bpm.value = 600;
-
+//this list will keep track of how many beats there are in the song
+var numberOfBeats = [];
+//sets the degault volume to 2.
 let vol = 2;
+let lastIndex = 0;
 
     
-
+//loads the sounds i will use. "sampler" is a type of keyboard and was sorced from "salamander"
 const sampler = new Tone.Sampler({
-    
+    //getting the notes i need
     urls: {
         "C4": "C4.mp3",
         "D#4": "Ds4.mp3",
@@ -21,15 +24,16 @@ const sampler = new Tone.Sampler({
     baseUrl: "https://tonejs.github.io/audio/salamander/",
    
 }).toDestination();
-
+//instrument "sampler" has been initialised
+//initilising my snare drum
 const snare = new Tone.Player("https://js-beginners.github.io/javascript30-drumkit/sounds/snare.wav").toDestination();
-
+//initialising my hihat
 const hihat = new Tone.Player("https://js-beginners.github.io/javascript30-drumkit/sounds/hihat.wav").toDestination();
 
-	
+//initialising my "tink" sound
 
 const tink = new Tone.Player("https://js-beginners.github.io/javascript30-drumkit/sounds/tink.wav").toDestination();
-
+// initialsing the kickdrum
 const kickDrum = new Tone.MembraneSynth({
     volume: 6
   }).toMaster();
@@ -69,56 +73,59 @@ const bass = new Tone.Synth({
 
 
 
+//this is called as soon as the mouse has been lifted up (ie a line has been drawn)
+//takes in the first y coordinate of the line, the bracket represents the number of possible notes on the screen
+function soundConverter(Ypos,bracket,width){
+    
+    
+    
 
-function soundConverter(Ypos,bracket){
-   
-    var note = Math.ceil(Ypos/bracket)-1;
-    music.insertIter(xStart[xStart.length-1],1);
-
-   
-  
+    // if the user is drawing then....
+    if (backgroundButtonPressed == false){
+      // works out which bracket the line falls into, to determine its note
+      var pitch = Math.ceil(Ypos/bracket)-1;
+      //creates a new Note object, with all the details of the note
+      
+      for (let i= 0; i < xcoOrds.length; i++) {
+        xcoOrds[i] = parseInt(xcoOrds[i]);
+        ycoOrds[i] = parseInt(ycoOrds[i])
+      }
+      var volume = volumeCalculator(width);
+      var newNote = new Note(pitch, volume, currentBrush, 0, xstart[xstart.length-1],xcoOrds,ycoOrds);
+      if (numberOfBeats.length == 0){
+        var beat = new Beat(newNote.xstart,newNote);
+        numberOfBeats.push(beat);
+        //music.inOrder();
+        music.insertIter(beat.mainNote,beat);
+        lastIndex = numberOfBeats.length-1;
+            
+      }else{
+        let noteAdded = false;
+        for (let i = 0; i < numberOfBeats.length; i++) {
+          
+          if (isItEllibile(newNote, numberOfBeats[i]) && noteAdded == false){
+            numberOfBeats[i].addNote(newNote);
+            lastIndex = i;
+            
+            noteAdded = true;
+          }
+         
+        }
+        if (!noteAdded){
+          
+          var beat = new Beat(newNote.xstart,newNote);
+          numberOfBeats.push(beat);
+          music.insertIter(beat.mainNote,beat);
+          lastIndex = numberOfBeats.length-1;
+        }
+      }
+      
+      
+      
     
-    if (currentBrush == 1){
-        //kickDrum.triggerAttackRelease('C1', '1m')
-        //Tone.loaded().then(() => {
-            //hihat.start();
-            //if (note==0){
-             //   hihat.start();
-            //}else if (note==1){
-            //    snare.start();
-            //}else if (note==2){
-            //tink.start();
-            //}
-        //})
-        
-        sampler.triggerAttackRelease(scale[note], "1m")
-        
-        
-    } else if (currentBrush == 2){
-        
-        snareDrum.triggerAttackRelease('4n')
-        sampler.triggerAttackRelease(chord[note][0], "1m")
-        sampler.triggerAttackRelease(chord[note][1], "1m")
-        sampler.triggerAttackRelease(chord[note][2], "1m")
-       
-        
-    } else if (currentBrush == 3){
-       Tone.loaded().then(() => {
-            if (note==0){
-                hihat.start();
-            }else if (note==1){
-                snareDrum.triggerAttackRelease('4n')
-            }else if (note==2){
-                kickDrum.triggerAttackRelease('C1', '1m')
-            }
-        }) 
-    
-    } 
-   
-    
-    
-   
-    return note;
+    //inserts the beat into the music
+    //
+}
 }
 
 function sectioning(innerHeight){
@@ -127,16 +134,30 @@ function sectioning(innerHeight){
     
     return bracket;
 }
+function volumeCalculator(width){
+  if (width<30){
+    return -10
+  }else if(width<50){
+    return 0
+  }else{
+    return 10
+  }
+}
 
+function isItEllibile(note,beat){
+  
+  return doesTheBrushExist(note,beat) && isThereOverlap(note.xcoOrds,beat.allxcoOrds);
+}
+function doesTheBrushExist(note,beat){
+  return !(beat.brushes.includes(note.brush))
+}
+function isThereOverlap(notexcoOrds,beatxcoOrds){
+   
+  return true
+}
 
  
-function order(x,y) {
-    
-    
-    quickSort([1, 6, 1, 5, 3, 2, 1, 4]);
 
-	
-}
 const quickSort = arr => {
    
     const a = [...arr];
@@ -165,37 +186,4 @@ const quickSort = arr => {
    
   
 
-
-
-//var canvas = document.getElementById("canvas");
-/* var ctx = canvas.getContext("2d");
-ctx.strokeStyle = "Green";
-var posY = 0;
-var lineLength = 10;
-var speed = 2;
-
-function drawLine() {
-	ctx.beginPath();
-  ctx.moveTo(10, posY);
-  ctx.lineTo(10, posY+lineLength);
-  ctx.stroke();
-}
-
-function moveLine () {
-	posY += speed;
-  
-  if (posY < 0 || posY > canvas.height) {
-	  speed = speed * -1;
-  }
-}
-
-function loop() {
-	// clear old frame;
-  ctx.clearRect(0,0,canvas.width, canvas.height);
-  moveLine();
-  drawLine();
-  requestAnimationFrame(loop);
-}
-requestAnimationFrame(loop);
- */
 

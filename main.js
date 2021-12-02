@@ -1,7 +1,7 @@
 let lines = [];
-let xStart = [];
+let xstart = [];
 let color = "blue";
-let yStart = [];
+let ystart = [];
 
 
 
@@ -28,6 +28,30 @@ var backgroundButtonPressed = false;
 var sectioningNumber = 8;
 //there are 3 brushes (3 colours) 1st color represents the melody, 2nd Brush represents the harmony, 3rd Brush represents the percussion
 let currentBrush =1;
+
+function playThisShiz(){
+    //format the background colour so it can be manipulated later
+    currentBackgroundColour = ((String(colorPicker.current()).replace(/rgb+a*[\W_]+/g, '')).slice(0, -1)).split(",") ;
+    
+     //converts the 'red', the 'blue' and the 'green' value to an integer so it can be used for comparison later. 
+    
+    currentBackgroundColour[0],currentBackgroundColour[1],currentBackgroundColour[2] = parseInt(currentBackgroundColour[0]) , parseInt(currentBackgroundColour[1]), parseInt(currentBackgroundColour[2]);
+    
+    maxColour = Math.max.apply(null, currentBackgroundColour);
+    //if the background colour is predominantly red the perform an inOrder traversal
+    if (maxColour == currentBackgroundColour[0]){
+        
+        music.inOrder()
+
+    //if the background colour is predominantly green the perform an preOrder traversal
+    } else if (maxColour == currentBackgroundColour[1]){
+        music.preOrder()
+    //if the background colour is predominantly blue the perform an postOrder traversal
+    } else{
+        music.postOrder()
+        
+    }
+}
 
 
 
@@ -71,7 +95,8 @@ function colour1(){
   }
   //refer to colour1
 function colour2(){
- 
+    
+   
     currentBrush = 2;
   
     sectioningNumber = 3;
@@ -167,8 +192,6 @@ function pallet2(){
     document.getElementById("dropUp2Button1").style.fill= pallet3colour1;
     document.getElementById("dropUp2Button2").style.fill= pallet3colour2;
     document.getElementById("dropUp2Button3").style.fill= pallet3colour3;
-
-
 }
 //refer to pallet 1
 function pallet3(){

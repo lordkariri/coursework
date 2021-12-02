@@ -1,22 +1,27 @@
 
 
 
-
+////create a canvas that will control the background colour. 
 var c = document.getElementById("backgroundCanvas");
 
 var backgroundctx = c.getContext("2d");
+//will store the 'c'anvas 'Height'
 var cH;
+//will store the 'c'anvas 'Width'
 var cW;
-var bgColor = "#FF6138";
+//set the default background colour
+var bgColor = "rgba(255,97,56,1)";
+//will store each "screen" 
 var animations = [];
+//will store the particles 
 var circles = [];
 var backgroundButtonPressed = false;
 
 
 
 var colorPicker = (function() {
-  
-  var currentBackgroundColour = "#FF6138";
+  //stores the currentbackground colour
+  var currentBackgroundColour = "rgba(255,97,56,1)";
   
   
   
@@ -24,6 +29,7 @@ var colorPicker = (function() {
   function current() {
     return currentBackgroundColour
   }
+
   function newColour(newBackgroundColour){
     currentBackgroundColour = newBackgroundColour;
   }
@@ -33,15 +39,19 @@ var colorPicker = (function() {
     newColour: newColour
   }
 })();
-
+//removes all the animations
 function removeAnimation(animation) {
+  //gets the index of the first animation in the list
   var index = animations.indexOf(animation);
+  //repaces the animation with a null value
   if (index > -1) animations.splice(index, 1);
 }
-
+//recieves the dimensions of the entire browser
 function calcPageFillRadius(x, y) {
+  //wh
   var l = Math.max(x - 0, cW - x);
   var h = Math.max(y - 0, cH - y);
+  //returns the answer to pythagorises theorum, works out the maximum radias the circlue needs to expand to 
   return Math.sqrt(Math.pow(l, 2) + Math.pow(h, 2));
 }
 
@@ -52,7 +62,9 @@ function handleEvent(e) {
 
     var imgData = canvasContext.getImageData((e.offsetX / canvas.clientWidth) * canvas.width, (e.offsetY / canvas.clientHeight) * canvas.height, 1, 1)
     var rgba = imgData.data;
+    
     var newBackgroundColour = "rgba(" + rgba[0] + ", " + rgba[1] + ", " + rgba[2] + ", " + rgba[3] + ")";
+    
     
     //colorPicker.newColour(newBackgroundColour)
     
@@ -236,5 +248,9 @@ function fauxClick(x, y) {
   fauxClick.pageY = y;
   document.dispatchEvent(fauxClick);
 }
+function backgroundChangeFinished(){
+  backgroundButtonPressed = false;
+}
 document.addEventListener("touchstart", handleEvent);
 document.addEventListener("mousedown", handleEvent);
+document.addEventListener("mouseup", backgroundChangeFinished);
